@@ -1,0 +1,140 @@
+MAX_SEATS = 50
+MAX_NAME_LENGTH = 50
+
+# Class to store booking details
+class Booking:
+    def __init__(self):
+        self.name = ""
+        self.age = 0
+        self.source = ""
+        self.destination = ""
+        self.seat_number = 0
+        self.is_booked = False
+
+train = [Booking() for _ in range(MAX_SEATS)]  # List to store booking details
+
+# Initialize the train seats as available
+def initializeSeats():
+    for i in range(MAX_SEATS):
+        train[i].is_booked = False  # False represents available seat
+
+# Function to display available seats
+def displayAvailableSeats():
+    print("\nAvailable seats:")
+    available = False
+    for i in range(MAX_SEATS):
+        if not train[i].is_booked:
+            print(f"Seat {i + 1}")
+            available = True
+    if not available:
+        print("No seats available.")
+
+# Function to book a seat
+def bookSeat():
+    try:
+        seat_number = int(input("Enter seat number to book: ")) - 1  # Adjust index
+    except ValueError:
+        print("Invalid input! Please enter a valid seat number.")
+        return
+
+    if seat_number < 0 or seat_number >= MAX_SEATS:
+        print("Invalid seat number")
+        return
+
+    if train[seat_number].is_booked:
+        print("Seat already booked")
+    else:
+        name = input("Enter passenger name: ")
+        if len(name) > MAX_NAME_LENGTH:
+            print(f"Name too long! Maximum {MAX_NAME_LENGTH} characters allowed.")
+            return
+
+        try:
+            age = int(input("Enter passenger age: "))
+        except ValueError:
+            print("Invalid input! Age must be a number.")
+            return
+
+        source = input("Enter source: ")
+        destination = input("Enter destination: ")
+
+        train[seat_number].is_booked = True
+        train[seat_number].seat_number = seat_number + 1  # Actual seat number
+        train[seat_number].name = name
+        train[seat_number].age = age
+        train[seat_number].source = source
+        train[seat_number].destination = destination
+        print("Seat booked successfully!")
+
+# Function to cancel a seat booking
+def cancelSeat():
+    try:
+        seat_number = int(input("Enter seat number to cancel booking: ")) - 1
+    except ValueError:
+        print("Invalid input! Please enter a valid seat number.")
+        return
+
+    if seat_number < 0 or seat_number >= MAX_SEATS:
+        print("Invalid seat number")
+        return
+
+    if train[seat_number].is_booked:
+        train[seat_number].is_booked = False
+        print("Seat booking cancelled successfully")
+    else:
+        print("Seat is not booked")
+
+# Function to print ticket details
+def printTicket(seat_number):
+    seat_number -= 1  # Adjust index
+
+    if seat_number < 0 or seat_number >= MAX_SEATS:
+        print("Invalid seat number")
+        return
+
+    if train[seat_number].is_booked:
+        print("\nTicket Details:")
+        print(f"Name: {train[seat_number].name}")
+        print(f"Age: {train[seat_number].age}")
+        print(f"Source: {train[seat_number].source}")
+        print(f"Destination: {train[seat_number].destination}")
+        print(f"Seat Number: {train[seat_number].seat_number}")
+    else:
+        print("Seat is not booked")
+
+def main():
+    initializeSeats()
+    choice = 0
+    while choice != 5:
+        print("\nTrain Booking System")
+        print("1. Display available seats")
+        print("2. Book a seat")
+        print("3. Cancel a seat booking")
+        print("4. Print ticket")
+        print("5. Exit")
+
+        try:
+            choice = int(input("Enter your choice: "))
+        except ValueError:
+            print("Invalid input! Please enter a number between 1 and 5.")
+            continue
+
+        if choice == 1:
+            displayAvailableSeats()
+        elif choice == 2:
+            bookSeat()
+        elif choice == 3:
+            cancelSeat()
+        elif choice == 4:
+            try:
+                seat_number = int(input("Enter seat number to print ticket: "))
+                printTicket(seat_number)
+            except ValueError:
+                print("Invalid input! Please enter a valid seat number.")
+        elif choice == 5:
+            print("Exiting... Thank you for using the system!")
+        else:
+            print("Invalid choice! Please enter a number between 1 and 5.")
+
+if __name__ == "__main__":
+    main()
